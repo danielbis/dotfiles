@@ -160,7 +160,7 @@ alias du_overview='du -h | grep "^[0-9,]*[MG]" | sort -hr | less'
 # shows the complete disk usage to legibly
 alias df='df -kTh'
 
-alias ducks='du -cks *|sort -rn|head -11'
+alias ducks='du -cksh *|sort -rn|head -11'
 # ------------------------------------------------------------------------------
 # | System Utilities                                                           |
 # ------------------------------------------------------------------------------

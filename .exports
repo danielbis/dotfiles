@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+export CDPATH=.:~
+
 # Make Python use UTF-8 encoding for output to stdin, stdout, and stderr.
 export PYTHONIOENCODING='UTF-8';
 
