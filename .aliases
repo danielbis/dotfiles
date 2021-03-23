@@ -1,0 +1,297 @@
+#!/usr/bin/env bash
+
+# Easier navigation
+alias ..="cd .."
+alias ...="cd ../.."
+alias ....="cd ../../.."
+alias .....="cd ../../../.."
+alias ~="cd ~"
+
+# Shortcuts 
+alias dl="cd ~/Downloads"
+alias dt="cd ~/Desktop"
+alias g="git"
+
+alias clr='clear'
+
+# safety features
+alias chown='chown --preserve-root'
+alias chmod='chmod --preserve-root'
+alias chgrp='chgrp --preserve-root'
+
+alias reload_bash_profile='source ~/.bash_profile'
+
+# ------------------------------------------------------------------------------
+# | Directories Commands (create / remove)                                     |
+# ------------------------------------------------------------------------------
+
+# mkdir: always create parent-dirs, if needed
+alias mkdir="mkdir -p"
+alias md="mkdir"
+
+# rmdir
+alias rd="rmdir"
+
+# create a dir with date from today
+alias mkdd='mkdir $(date +%Y%m%d)'
+
+
+# Detect which `ls` flavor is in use
+if ls --color > /dev/null 2>&1; then # GNU `ls`
+	colorflag="--color"
+	export LS_COLORS='no=00:fi=00:di=01;31:ln=01;36:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arj=01;31:*.taz=01;31:*.lzh=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.gz=01;31:*.bz2=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.jpg=01;35:*.jpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.avi=01;35:*.fli=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.ogg=01;35:*.mp3=01;35:*.wav=01;35:'
+else # macOS `ls`
+	colorflag="-G"
+	export LSCOLORS='BxBxhxDxfxhxhxhxhxcxcx'
+fi
+
+
+# ------------------------------------------------------------------------------
+# | ls on steroids														       |
+# ------------------------------------------------------------------------------ 
+
+# List all files colorized in long format
+alias l="ls -lF ${colorflag}"
+# List all files colorized in long format, excluding . and ..
+alias la="ls -lAF ${colorflag}"
+# List only directories
+alias lsd="ls -lF ${colorflag} | grep --color=never '^d'"
+# Always use color output for `ls`
+alias ls="command ls ${colorflag}"
+# show last 10 recently changed files
+alias lt="ls -altr | grep -v '^d' | tail -n 10"
+# show files and directories (also in sub-dir) that was touched in the last hour
+alias lf="find ./* -ctime -1 | xargs ls -ltr $COLORFLAG"
+# displays files and directories in detail
+alias ll="ls -lFh --group-directories-first $COLORFLAG"
+# shows the most recently modified files at the bottom of
+alias llr="ls -lartFh --group-directories-first $COLORFLAG"
+# sort by file-size
+alias lS="ls -1FSshr $COLORFLAG"
+
+# Always enable colored `grep` output
+# Note: `GREP_OPTIONS="--color=auto"` is deprecated, hence the alias usage.
+alias grep='grep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias egrep='egrep --color=auto'
+
+# ------------------------------------------------------------------------------
+# | super-grep :) -- https://github.com/voku/dotfiles/blob/master/.aliases     |
+# ------------------------------------------------------------------------------ 
+
+# -n : Each output line is preceded by its relative line number in the file, starting at line 1.  The line number
+#      counter is reset for each file processed.  This option is ignored if -c, -L, -l, or -q is specified.
+# -R : Recursively search subdirectories listed
+# -H : Always print filename headers with output lines.
+# -C : Print num lines of leading and trailing context surrounding each match.  The default is 2 and is
+#      equivalent to -A 2 -B 2.  Note: no whitespace may be given between the option and its argument. 
+alias sgrep='grep -R -n -H -C 5 --exclude-dir={.git,.svn,CVS} '
+
+
+# Enable aliases to be sudo’ed
+alias sudo='sudo '
+
+# Get week number
+alias week='date +%V'
+
+# Google Chrome
+alias chrome='/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome'
+
+
+# ------------------------------------------------------------------------------
+# | Network                                                                    |
+# ------------------------------------------------------------------------------
+
+# IP addresses
+alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
+alias localip="ipconfig getifaddr en0"
+
+# Show active network interfaces
+alias ifactive="ifconfig | pcregrep -M -o '^[^\t:]+:([^\n]|\n\t)*status: active'"
+
+# Gzip-enabled `curl`
+alias gurl="curl --compressed"
+
+# displays the ports that use the applications
+alias lsport='sudo lsof -i -T -n'
+
+# shows more about the ports on which the applications use
+alias llport='netstat -nape --inet --inet6'
+
+# show only active network listeners
+alias netlisteners='sudo lsof -i -P | grep LISTEN'
+
+
+# ------------------------------------------------------------------------------
+# | Hard- & Software Infos                                                     |
+# ------------------------------------------------------------------------------
+
+# get top process eating memory
+alias psmem="ps -o time,ppid,pid,nice,pcpu,pmem,user,comm -A | sort -n -k 6"
+alias psmem5="psmem | tail -5"
+alias psmem10="psmem | tail -10"
+
+# get top process eating cpu
+alias pscpu="ps -o time,ppid,pid,nice,pcpu,pmem,user,comm -A | sort -n -k 5"
+alias pscpu5="pscpu5 | tail -5"
+alias pscpu10="pscpu | tail -10"
+
+# shows the corresponding process to ...
+alias psx="ps auxwf | grep "
+
+# shows the process structure to clearly
+alias pst="pstree -Alpha"
+
+# shows all your processes
+alias psmy="ps -ef | grep $USER"
+
+# the load-avg
+alias loadavg="cat /proc/loadavg"
+
+# show all partitions
+alias partitions="cat /proc/partitions"
+
+# shows the disk usage of a directory legibly
+alias du='du -kh'
+
+# show the biggest files in a folder first
+alias du_overview='du -h | grep "^[0-9,]*[MG]" | sort -hr | less'
+
+# shows the complete disk usage to legibly
+alias df='df -kTh'
+
+alias ducks='du -cks *|sort -rn|head -11'
+# ------------------------------------------------------------------------------
+# | System Utilities                                                           |
+# ------------------------------------------------------------------------------
+
+# Recursively delete `.DS_Store` files
+alias cleanupdstore="find . -type f -name '*.DS_Store' -ls -delete"
+
+# Empty the Trash on all mounted volumes and the main HDD.
+# Also, clear Apple’s System Logs to improve shell startup speed.
+# Finally, clear download history from quarantine. https://mths.be/bum
+alias emptytrash="sudo rm -rfv /Volumes/*/.Trashes; sudo rm -rfv ~/.Trash; sudo rm -rfv /private/var/log/asl/*.asl; sqlite3 ~/Library/Preferences/com.apple.LaunchServices.QuarantineEventsV* 'delete from LSQuarantineEvent'"
+
+# Show/hide hidden files in Finder
+alias show="defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder"
+alias hide="defaults write com.apple.finder AppleShowAllFiles -bool false && killall Finder"
+
+# Hide/show all desktop icons (useful when presenting)
+alias hidedesktop="defaults write com.apple.finder CreateDesktop -bool false && killall Finder"
+alias showdesktop="defaults write com.apple.finder CreateDesktop -bool true && killall Finder"
+
+# Disable Spotlight
+alias spotoff="sudo mdutil -a -i off"
+# Enable Spotlight
+alias spoton="sudo mdutil -a -i on"
+
+# Intuitive map function
+# For example, to list all directories that contain a certain file:
+# find . -name .gitattributes | map dirname
+alias map="xargs -n1"
+
+# Kill all the tabs in Chrome to free up memory
+# [C] explained: http://www.commandlinefu.com/commands/view/402/exclude-grep-from-your-grepped-output-of-ps-alias-included-in-description
+alias chromekill="ps ux | grep '[C]hrome Helper --type=renderer' | grep -v extension-process | tr -s ' ' | cut -d ' ' -f2 | xargs kill"
+
+# Lock the screen (when going AFK)
+alias afk="/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resources/CGSession -suspend"
+
+# Reload the shell (i.e. invoke as a login shell)
+alias reload="exec ${SHELL} -l"
+
+# Print each PATH entry on a separate line
+alias prettypath='echo -e ${PATH//:/\\n}'
+
+
+# ------------------------------------------------------------------------------
+# | Other                                                                      |
+# ------------------------------------------------------------------------------
+
+alias remote_tboard="ssh -Nf -L 6006:localhost:6006 -J daniel@vichy.cavis.fsu.edu danielbis@$DEEPMIND_IP"
+
+# keep the ssh connection open for at least two hours
+alias ssh="ssh -o \"ServerAliveInterval 60\" -o \"ServerAliveCountMax 120\""
+
+# stopwatch
+alias timer='echo "Timer started. Stop with Ctrl-D." && date && time cat && date'
+
+
+
+alias py='python'
+alias ipy='ipython'
+
+
+# URL-encode strings
+alias urlencode='python -c "import sys, urllib as ul; print ul.quote_plus(sys.argv[1]);"'
+
+# Merge PDF files, preserving hyperlinks
+# Usage: `mergepdf input{1,2,3}.pdf`
+alias mergepdf='gs -q -dNOPAUSE -dBATCH -sDEVICE=pdfwrite -sOutputFile=_merged.pdf'
+
+
+
+# Automatically add completion for all aliases to commands having completion functions
+# source: http://superuser.com/questions/436314/how-can-i-get-bash-to-perform-tab-completion-for-my-aliases
+alias_completion()
+{
+  local namespace="alias_completion"
+
+  # parse function based completion definitions, where capture group 2 => function and 3 => trigger
+  local compl_regex='complete( +[^ ]+)* -F ([^ ]+) ("[^"]+"|[^ ]+)'
+  # parse alias definitions, where capture group 1 => trigger, 2 => command, 3 => command arguments
+  local alias_regex="alias ([^=]+)='(\"[^\"]+\"|[^ ]+)(( +[^ ]+)*)'"
+
+  # create array of function completion triggers, keeping multi-word triggers together
+  eval "local completions=($(complete -p | sed -rne "/$compl_regex/s//'\3'/p"))"
+  (( ${#completions[@]} == 0 )) && return 0
+
+  # create temporary file for wrapper functions and completions
+  rm -f "/tmp/${namespace}-*.XXXXXXXXXX" # preliminary cleanup
+  local tmp_file="$(mktemp "/tmp/${namespace}-${RANDOM}.XXXXXXXXXX")" || return 1
+
+  # read in "<alias> '<aliased command>' '<command args>'" lines from defined aliases
+  local line; while read line; do
+    eval "local alias_tokens=($line)" 2>/dev/null || continue # some alias arg patterns cause an eval parse error
+    local alias_name="${alias_tokens[0]}" alias_cmd="${alias_tokens[1]}" alias_args="${alias_tokens[2]# }"
+
+    # skip aliases to pipes, boolan control structures and other command lists
+    # (leveraging that eval errs out if $alias_args contains unquoted shell metacharacters)
+    eval "local alias_arg_words=($alias_args)" 2>/dev/null || continue
+
+    # skip alias if there is no completion function triggered by the aliased command
+    [[ " ${completions[*]} " =~ " $alias_cmd " ]] || continue
+    local new_completion="$(complete -p "$alias_cmd")"
+
+    # create a wrapper inserting the alias arguments if any
+    if [[ -n $alias_args ]]; then
+     local compl_func="${new_completion/#* -F /}"; compl_func="${compl_func%% *}"
+     # avoid recursive call loops by ignoring our own functions
+     if [[ "${compl_func#_$namespace::}" == $compl_func ]]; then
+       local compl_wrapper="_${namespace}::${alias_name}"
+         echo "function $compl_wrapper {
+           (( COMP_CWORD += ${#alias_arg_words[@]} ))
+           COMP_WORDS=($alias_cmd $alias_args \${COMP_WORDS[@]:1})
+           $compl_func
+         }" >> "$tmp_file"
+         new_completion="${new_completion/ -F $compl_func / -F $compl_wrapper }"
+     fi
+    fi
+
+    # replace completion trigger by alias
+    new_completion="${new_completion% *} $alias_name"
+    echo "$new_completion" >> "$tmp_file"
+  done < <(alias -p | sed -rne "s/$alias_regex/\1 '\2' '\3'/p")
+  source "$tmp_file" && rm -f "$tmp_file"
+}
+if [ -n "$BASH_VERSION" ]; then
+  alias_completion
+fi
+unset -f alias_completion
+
+
+
+
+
+
