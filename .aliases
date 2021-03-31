@@ -123,6 +123,14 @@ alias netlisteners='sudo lsof -i -P | grep LISTEN'
 
 
 # ------------------------------------------------------------------------------
+# | Remote								       |
+# ------------------------------------------------------------------------------
+
+alias cavis="ssh daniel@vichy.cavis.fsu.edu"
+alias deepmind="ssh -J daniel@vichy.cavis.fsu.edu danielbis@192.168.1.8"
+alias sftp_cavis="sshpass -e sftp daniel@vichy.cavis.fsu.edu"
+
+# ------------------------------------------------------------------------------
 # | Hard- & Software Infos                                                     |
 # ------------------------------------------------------------------------------
 
